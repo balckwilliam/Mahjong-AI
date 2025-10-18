@@ -93,3 +93,25 @@ $ websockify 8888 127.0.0.1:9999  # 第一个端口号为网页中websocket连�
 ```shell
 $ python http.server -m 8080
 ```
+
+## OT服务器接口
+
+本项目现已支持 [@latorc/MahjongCopilot](https://github.com/latorc/MahjongCopilot) 的OT服务器接口，允许其他应用程序通过HTTP API获取AI决策。
+
+启动OT服务器：
+```shell
+$ python online_game/ot_server.py -p 5000
+```
+
+详细文档请参见：[docs/OT_SERVER.md](docs/OT_SERVER.md)
+
+## OT Server Interface
+
+This project now supports the OT server interface from [@latorc/MahjongCopilot](https://github.com/latorc/MahjongCopilot), allowing other applications to get AI decisions via HTTP API.
+
+Start the OT server:
+```shell
+$ python online_game/ot_server.py -p 5000
+```
+
+For detailed documentation, see: [docs/OT_SERVER.md](docs/OT_SERVER.md)
