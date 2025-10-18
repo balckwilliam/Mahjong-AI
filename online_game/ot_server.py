@@ -14,12 +14,19 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 try:
     import torch
-    import numpy as np
     from mahjong.agent import AiAgent
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
     logging.warning("PyTorch not available. OT server will use random decisions.")
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    NUMPY_AVAILABLE = False
+    # Use Python's random module as fallback
+    import random
 
 app = Flask(__name__)
 ai_agent = None
@@ -93,7 +100,7 @@ def react_batch_4p():
         q_out = []
         
         for obs, mask in zip(obs_list, masks_list):
-            if TORCH_AVAILABLE and ai_agent is not None:
+            if TORCH_AVAILABLE and ai_agent is not None and NUMPY_AVAILABLE:
                 # Convert to numpy arrays if needed
                 if isinstance(obs, list):
                     obs = np.array(obs)
@@ -104,7 +111,7 @@ def react_batch_4p():
                 # For now, select random valid action based on mask
                 valid_actions = [i for i, m in enumerate(mask) if m]
                 if valid_actions:
-                    action = np.random.choice(valid_actions)
+                    action = int(np.random.choice(valid_actions))
                 else:
                     action = 0
                 
@@ -115,12 +122,13 @@ def react_batch_4p():
                     q_values[action] = 1.0
                 q_out.append(q_values)
             else:
-                # Fallback: random action selection
-                if isinstance(mask, list):
-                    mask = np.array(mask)
+                # Fallback: random action selection using Python's random module
                 valid_actions = [i for i, m in enumerate(mask) if m]
                 if valid_actions:
-                    action = np.random.choice(valid_actions)
+                    if NUMPY_AVAILABLE:
+                        action = int(np.random.choice(valid_actions))
+                    else:
+                        action = random.choice(valid_actions)
                 else:
                     action = 0
                 

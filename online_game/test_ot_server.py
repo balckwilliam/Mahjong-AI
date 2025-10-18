@@ -5,7 +5,6 @@ Test script for OT Server
 import json
 import gzip
 import requests
-import numpy as np
 
 
 def test_health_check(base_url):

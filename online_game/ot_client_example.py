@@ -8,7 +8,6 @@ This example demonstrates how to connect to the OT server and get AI decisions.
 import json
 import gzip
 import requests
-import numpy as np
 
 
 class OTClient:
